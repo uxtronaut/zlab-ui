@@ -73,7 +73,7 @@ const actions: ActionTree<SitesState, RootState> = {
     siteSlug: string,
   ) {
     // Promise because we need to resolve and redirect home after site
-    // is deleted, or reject and stay put on server/connection error
+    // is deleted, or reject and stay put after server/connection error
     return new Promise(async (resolve, reject) => {
       try {
         const response: AxiosResponse = await api.sites.destroy(siteSlug);
