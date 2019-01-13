@@ -1,12 +1,12 @@
 <template lang="pug">
 b-container
-  b-row(align-v="center" v-if="site")
+  b-row(align-v="center")
     b-col
       h2
         router-link(:to="{ name: 'home' }")
           | Sites
         |
-        | / {{ site.name }}
+        | / {{ site && site.name }}
 
     b-col(cols="auto")
       b-button(variant="outline-danger" v-b-modal.confirm-delete)
@@ -14,7 +14,7 @@ b-container
       b-modal(
         id="confirm-delete"
         ref="confirmDelete"
-        :title="'Really delete ' + site.name + '?'"
+        :title="site && 'Really delete ' + site.name + '?'"
         ok-variant="danger"
         ok-title="Delete"
         @ok="destroyAndRedirect"
@@ -23,7 +23,8 @@ b-container
 
   b-row
     b-col
-      region/
+      b-card
+        environments-list(:siteSlug="currentSiteSlug")/
 </template>
 
 <script lang="ts">
@@ -38,9 +39,9 @@ import {
 import SitesConstants from '@/store/sites/constants';
 import { RootState } from '@/store/types';
 
-import Region from '@/components/Sites/Region.vue';
+import EnvironmentsList from '@/components/Sites/Environments/List.vue';
 
-@Component({ components: { region: Region } })
+@Component({ components: { 'environments-list': EnvironmentsList } })
 export default class Site extends Vue {
   @State((state: RootState) => state.sites.currentSiteSlug)
   private currentSiteSlug!: string;
@@ -68,7 +69,7 @@ export default class Site extends Vue {
     try {
       await this.destroy(this.currentSiteSlug);
       // @ts-ignore
-      this.$refs.confirmDelete.close();
+      this.$refs.confirmDelete.hide();
       this.$router.push({ name: 'home' });
     } catch (error) {
       // @ts-ignore

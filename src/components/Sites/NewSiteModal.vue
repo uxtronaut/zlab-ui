@@ -20,17 +20,6 @@ div
           :state="stateFor('name')"
         )
 
-      b-form-group(
-        :invalid-feedback="invalidFeedbackFor('domain')"
-        :state="stateFor('domain')"
-      )
-        b-form-input(
-          type="text"
-          v-model="site.domain"
-          placeholder="Domain"
-          :state="stateFor('domain')"
-        )
-
       .modal-footer(slot="modal-footer")
         b-button(variant="light" @click="() => setNew(undefined)") Cancel
         b-button(variant="primary" type="submit" @click="saveAndKeepOpen") Save
@@ -46,7 +35,7 @@ import SitesConstants from '@/store/sites/constants';
 import AlertsConstants from '@/store/alerts/constants';
 
 @Component
-export default class SitesForm extends Vue {
+export default class NewSiteModal extends Vue {
   @State((state: RootState) => state.sites.newSite) private site: Site | undefined;
 
   @Action(SitesConstants.actions.CREATE) private save!: (site: Site) => Promise<void>;
@@ -80,11 +69,7 @@ export default class SitesForm extends Vue {
     event.preventDefault(); // Prevent modal from closing on OK
 
     if (!this.site) { return; }
-    try {
-      await this.save(this.site);
-    } catch (error) {
-      this.setError('There was a server error saving your site...');
-    }
+    await this.save(this.site);
   }
 }
 </script>

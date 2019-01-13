@@ -32,6 +32,9 @@ h2
   margin: 0
   line-height: 4rem
 
+h3
+  font-size: 1.15rem
+
 .modal-header
   border-bottom: 0
   padding-bottom: 0

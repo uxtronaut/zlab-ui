@@ -29,7 +29,7 @@ import { RootState } from '@/store/types';
 import { Site } from '@/store/sites/types';
 import SitesConstants from '@/store/sites/constants';
 
-import SitesForm from './Form.vue';
+import SitesForm from './NewSiteModal.vue';
 
 @Component({ components: { 'sites-form': SitesForm } })
 export default class SitesList extends Vue {

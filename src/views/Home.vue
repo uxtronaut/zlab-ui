@@ -16,8 +16,8 @@ import SitesList from '@/components/Sites/List.vue';
 
 @Component({ components: { 'sites-list': SitesList } })
 export default class Home extends Vue {
-  @Action(SitesConstants.actions.FETCH)
-  private fetchSites!: () => void;
+  @Action(SitesConstants.actions.LIST)
+  private listSites!: () => void;
 
   @Mutation(AlertsConstants.mutations.SET_ERROR) setError!: (message: undefined) => void;
 
@@ -30,7 +30,7 @@ export default class Home extends Vue {
     this.setError(undefined);
     this.setNotice(undefined);
     this.setCurrentSlug(undefined);
-    this.fetchSites();
+    this.listSites();
   }
 }
 </script>
