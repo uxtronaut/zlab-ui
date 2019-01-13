@@ -2,18 +2,28 @@
 b-form(v-if="environment" @submit="save")
   b-row
     b-col
-      b-form-group(label="Name")
+      b-form-group(
+        label="Name"
+        :invalid-feedback="invalidFeedbackFor('name')"
+        :state="stateFor('name')"
+      )
         b-form-input(
           v-model="environment.name"
           ref="nameField"
           type="text"
+          :state="stateFor('name')"
         )
 
     b-col
-      b-form-group(label="Domain")
+      b-form-group(
+        label="Domain"
+        :invalid-feedback="invalidFeedbackFor('domain')"
+        :state="stateFor('domain')"
+      )
         b-form-input(
           v-model="environment.domain"
           type="text"
+          :state="stateFor('domain')"
         )
 
     b-col(cols="auto")
@@ -31,7 +41,12 @@ b-form(v-if="environment" @submit="save")
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import {
+  Component,
+  Vue,
+  Watch,
+  Mixins,
+} from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
 
 import { RootState } from '@/store/types';
@@ -39,8 +54,10 @@ import { Site, Environment } from '@/store/sites/types';
 
 import SitesConstants from '@/store/sites/constants';
 
+import HasValidations from '../../HasValidations';
+
 @Component
-export default class EnvironmentForm extends Vue {
+export default class EnvironmentForm extends Mixins(HasValidations) {
   @State((state: RootState) => state.sites.newEnvironment)
   private environment!: Environment;
 
@@ -55,6 +72,8 @@ export default class EnvironmentForm extends Vue {
     // @ts-ignore
     if (!oldValue) { this.$nextTick(() => { this.$refs.nameField.focus(); }); }
   }
+
+  protected validationObjectName: string = 'environment';
 
   private save(event: Event): void {
     event.preventDefault();

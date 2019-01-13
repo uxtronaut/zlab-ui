@@ -26,17 +26,25 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import {
+  Component,
+  Vue,
+  Watch,
+  Mixins,
+} from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
 
 import { RootState } from '@/store/types';
 import { Site } from '@/store/sites/types';
+
 import SitesConstants from '@/store/sites/constants';
 import AlertsConstants from '@/store/alerts/constants';
 
+import HasValidations from '../HasValidations';
+
 @Component
-export default class NewSiteModal extends Vue {
-  @State((state: RootState) => state.sites.newSite) private site: Site | undefined;
+export default class NewSiteModal extends Mixins(HasValidations) {
+  @State((state: RootState) => state.sites.newSite) protected site: Site | undefined;
 
   @Action(SitesConstants.actions.CREATE) private save!: (site: Site) => Promise<void>;
 
@@ -53,15 +61,7 @@ export default class NewSiteModal extends Vue {
     }
   }
 
-  private invalidFeedbackFor(field: string): string {
-    if (!this.site || !this.site.errors || !this.site.errors[field]) { return ''; }
-    return this.site.errors[field][0];
-  }
-
-  private stateFor(field: string): boolean | undefined {
-    if (!this.site || !this.site.errors || !this.site.errors[field]) { return undefined; }
-    return this.site.errors[field].length === 0;
-  }
+  protected validationObjectName: string = 'site';
 
   private async saveAndKeepOpen(event: Event) {
     event.preventDefault(); // Prevent modal from closing on OK

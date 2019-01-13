@@ -9,11 +9,11 @@
     )
       b-row
         b-col
-          h4 {{ env.name }}
+          h4.value {{ env.name }}
         b-col(cols="auto")
           delete-button(:slug="env.slug" :name="env.name")/
 
-      code {{ env.domain }}
+      div.value {{ env.domain }}
 
   p.text-muted(v-if="!newEnvironment && site && !site.environments.length")
     | No configured environments...
