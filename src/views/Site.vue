@@ -1,12 +1,27 @@
 <template lang="pug">
 b-container
-  b-row
+  b-row(align-v="center" v-if="site")
     b-col
       h2
         router-link(:to="{ name: 'home' }")
           | Sites
         |
         | / {{ site.name }}
+    b-col(cols="auto")
+      b-button(variant="outline-danger" v-b-modal.confirm-delete)
+        | Delete Site
+      b-modal(
+        id="confirm-delete"
+        :title="'Really delete ' + site.name + '?'"
+        ok-variant="danger"
+        ok-title="Delete"
+        @ok="destroyAndRedirect"
+      )
+        | This action cannot be undone...
+
+  b-row
+    b-col
+      region/
 </template>
 
 <script lang="ts">
@@ -21,7 +36,9 @@ import {
 import SitesConstants from '@/store/sites/constants';
 import { RootState } from '@/store/types';
 
-@Component
+import Region from '@/components/Sites/Region.vue';
+
+@Component({ components: { region: Region } })
 export default class Site extends Vue {
   @State((state: RootState) => state.sites.currentSiteSlug)
   private currentSiteSlug!: string;
@@ -29,15 +46,23 @@ export default class Site extends Vue {
   @Action(SitesConstants.actions.FETCH)
   private fetch!: (siteSlug: string) => Promise<void>;
 
+  @Action(SitesConstants.actions.DESTROY)
+  private destroy!: (siteSlug: string) => Promise<void>;
+
   @Mutation(SitesConstants.mutations.SET_CURRENT_SLUG)
   private setCurrentSlug!: (siteSlug: string) => void;
 
   @Getter(SitesConstants.getters.getSite)
   private getSite!: (siteSlug: string) => Site;
 
-  created(): void {
+  private created(): void {
     const slug: string = this.$route.params.siteSlug;
     this.fetch(slug).then(() => this.setCurrentSlug(slug));
+  }
+
+  private destroyAndRedirect(): void {
+    this.destroy(this.currentSiteSlug)
+      .then(() => { this.$router.push({ name: 'home' }); });
   }
 
   private get site(): Site {

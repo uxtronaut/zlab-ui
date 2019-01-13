@@ -11,6 +11,7 @@ const SitesConstants: StoreConstants = {
     SET_NEW: 'sites/SET_NEW',
     SET_CURRENT_SLUG: 'sites/SET_CURRENT_SLUG',
     ADD: 'sites/ADD',
+    REMOVE: 'sites/REMOVE',
   },
   getters: {
     getSite: 'sites/getSite',

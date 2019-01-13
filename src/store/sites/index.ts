@@ -54,25 +54,37 @@ const actions: ActionTree<SitesState, RootState> = {
       commit(_consts.mutations.SET_NEW, error.response.data.site);
     }
   },
+
+  async [_consts.actions.DESTROY](
+    { commit }: { commit: Commit },
+    siteSlug: string,
+  ) {
+    try {
+      const response: AxiosResponse = await api.sites.destroy(siteSlug);
+      commit(_consts.mutations.REMOVE, siteSlug);
+    } catch (error) {
+      // commit(SET_ERROR, 'Failed to delete site...');
+    }
+  },
 };
 
 const mutations: MutationTree<SitesState> = {
-  [_consts.mutations.SET](state: SitesState, sites: Site[]) {
+  [_consts.mutations.SET](state: SitesState, sites: Site[]): SitesState {
     state.list = sites;
     return state;
   },
 
-  [_consts.mutations.SET_NEW](state: SitesState, site: Site) {
+  [_consts.mutations.SET_NEW](state: SitesState, site: Site): SitesState {
     state.newSite = site;
     return state;
   },
 
-  [_consts.mutations.SET_CURRENT_SLUG](state: SitesState, siteSlug: string) {
+  [_consts.mutations.SET_CURRENT_SLUG](state: SitesState, siteSlug: string): SitesState {
     state.currentSiteSlug = siteSlug;
     return state;
   },
 
-  [_consts.mutations.ADD](state: SitesState, site: Site) {
+  [_consts.mutations.ADD](state: SitesState, site: Site): SitesState {
     state.list = [site, ...state.list];
     return state;
   },

@@ -24,11 +24,14 @@ const http: AxiosInstance = axios.create({
 export default {
   sites: {
     fetch(siteSlug?: string): Promise<AxiosResponse> {
-      if (arguments.length === 0) { return http.get('/sites'); }
+      if (!siteSlug) { return http.get('/sites'); }
       return http.get(`/sites/${siteSlug}`);
     },
     create(site: Site): Promise<AxiosResponse> {
       return http.post('/sites', site);
+    },
+    destroy(siteSlug: string): Promise<AxiosResponse> {
+      return http.delete(`/sites/${siteSlug}`);
     },
   },
 };

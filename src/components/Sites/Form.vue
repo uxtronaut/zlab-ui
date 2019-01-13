@@ -3,11 +3,11 @@ div
   b-modal(
     @shown="() => { $refs.siteNameField.focus(); }"
     @hidden="() => { if (site) { setNew(undefined) } }"
-    @ok="saveAndKeepOpen"
+    :hide-footer="true"
     title="New Site"
     ref="modal"
   )
-    b-form(v-if="site")
+    b-form(v-if="site" @submit="saveAndKeepOpen")
       b-form-group(
         :invalid-feedback="invalidFeedbackFor('name')"
         :state="stateFor('name')"
@@ -30,6 +30,10 @@ div
           placeholder="Domain"
           :state="stateFor('domain')"
         )
+
+      .modal-footer(slot="modal-footer")
+        b-button(variant="light" @click="() => setNew(undefined)") Cancel
+        b-button(variant="primary" type="submit" @click="saveAndKeepOpen") Save
 </template>
 
 <script lang="ts">
@@ -69,11 +73,16 @@ export default class SitesForm extends Vue {
     return this.site.errors[field].length === 0;
   }
 
-  private saveAndKeepOpen($event: Event) {
-    $event.preventDefault();
+  private saveAndKeepOpen(event: Event) {
+    event.preventDefault(); // Prevent modal from closing on OK
 
     if (!this.site) { return; }
     this.save(this.site);
   }
 }
 </script>
+
+<style scoped lang="sass">
+.modal-footer
+  padding: 0
+</style>

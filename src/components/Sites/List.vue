@@ -1,15 +1,14 @@
 <template lang="pug">
 .sites
-  b-row
+  b-row(align-v="center")
     b-col
       h2 Sites
     b-col(cols="auto")
       b-button(
         variant="primary"
-        size="lg"
         @click="newSite({ name: '', domain: '' })"
       )
-        | New
+        | New Site
 
   b-list-group
     b-list-group-item(
@@ -27,8 +26,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { State, Mutation } from 'vuex-class';
 
 import { RootState } from '@/store/types';
-import SitesConstants from '@/store/sites/constants';
 import { Site } from '@/store/sites/types';
+import SitesConstants from '@/store/sites/constants';
 
 import SitesForm from './Form.vue';
 
