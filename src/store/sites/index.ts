@@ -9,11 +9,14 @@ import {
 } from 'vuex';
 
 import api from '@/api/index';
-import { removeNamespace } from '../../util';
+import { removeNamespace } from '@/util';
 
 import { RootState } from '../types';
 import { SitesState, Site } from './types';
+
+import AlertsConstants from '../alerts/constants';
 import SitesConstants from './constants';
+
 
 const _consts = removeNamespace('sites/', SitesConstants);
 
@@ -38,7 +41,7 @@ const actions: ActionTree<SitesState, RootState> = {
         commit(_consts.mutations.SET, response.data.sites);
       }
     } catch (error) {
-      // commit(SET_ERROR, 'Failed to fetch sites...');
+      commit(AlertsConstants.mutations.SET_ERROR, 'Failed to fetch sites...', { root: true });
     }
   },
 
@@ -51,7 +54,11 @@ const actions: ActionTree<SitesState, RootState> = {
       commit(_consts.mutations.ADD, response.data.site);
       commit(_consts.mutations.SET_NEW, undefined);
     } catch (error) {
-      commit(_consts.mutations.SET_NEW, error.response.data.site);
+      if (error.response && error.response.data && error.response.data.site) {
+        commit(_consts.mutations.SET_NEW, error.response.data.site);
+      } else {
+        commit(AlertsConstants.mutations.SET_ERROR, 'Failed to save site...', { root: true });
+      }
     }
   },
 
@@ -59,12 +66,16 @@ const actions: ActionTree<SitesState, RootState> = {
     { commit }: { commit: Commit },
     siteSlug: string,
   ) {
-    try {
-      const response: AxiosResponse = await api.sites.destroy(siteSlug);
-      commit(_consts.mutations.REMOVE, siteSlug);
-    } catch (error) {
-      // commit(SET_ERROR, 'Failed to delete site...');
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response: AxiosResponse = await api.sites.destroy(siteSlug);
+        commit(_consts.mutations.REMOVE, siteSlug);
+        resolve();
+      } catch (error) {
+        commit(AlertsConstants.mutations.SET_ERROR, 'Failed to delete site...', { root: true });
+        reject();
+      }
+    });
   },
 };
 
@@ -86,6 +97,11 @@ const mutations: MutationTree<SitesState> = {
 
   [_consts.mutations.ADD](state: SitesState, site: Site): SitesState {
     state.list = [site, ...state.list];
+    return state;
+  },
+
+  [_consts.mutations.REMOVE](state: SitesState, siteSlug: string): SitesState {
+    state.list = state.list.filter((site: Site) => site.slug !== siteSlug);
     return state;
   },
 };

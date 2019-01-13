@@ -1,6 +1,7 @@
 <template lang="pug">
 #app
-  top-bar
+  top-bar/
+  alerts/
   router-view/
 </template>
 
@@ -8,9 +9,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import TopBar from '@/components/TopBar.vue';
+import Alerts from '@/components/Alerts.vue';
 
-@Component({ components: { 'top-bar': TopBar } })
-export default class Region extends Vue {}
+@Component({
+  components: {
+    'top-bar': TopBar,
+    alerts: Alerts,
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style lang="sass">
@@ -19,11 +26,11 @@ export default class Region extends Vue {}
 @import '../node_modules/bootstrap-vue/dist/bootstrap-vue'
 
 h2
-  line-height: 47.3px
   font-size: 1.33rem
   vertical-align: middle
   padding: 0
   margin: 0
+  line-height: 4rem
 
 .modal-header
   border-bottom: 0

@@ -43,6 +43,7 @@ import { State, Action, Mutation } from 'vuex-class';
 import { RootState } from '@/store/types';
 import { Site } from '@/store/sites/types';
 import SitesConstants from '@/store/sites/constants';
+import AlertsConstants from '@/store/alerts/constants';
 
 @Component
 export default class SitesForm extends Vue {
@@ -50,7 +51,9 @@ export default class SitesForm extends Vue {
 
   @Action(SitesConstants.actions.CREATE) private save!: (site: Site) => Promise<void>;
 
-  @Mutation(SitesConstants.mutations.SET_NEW) private setNew!: void;
+  @Mutation(SitesConstants.mutations.SET_NEW) private setNew!: (site: Site) => void;
+
+  @Mutation(AlertsConstants.mutations.SET_ERROR) private setError!: (message: string) => void;
 
   @Watch('site')
   onSiteChanged(value: Site) {
@@ -73,11 +76,15 @@ export default class SitesForm extends Vue {
     return this.site.errors[field].length === 0;
   }
 
-  private saveAndKeepOpen(event: Event) {
+  private async saveAndKeepOpen(event: Event) {
     event.preventDefault(); // Prevent modal from closing on OK
 
     if (!this.site) { return; }
-    this.save(this.site);
+    try {
+      await this.save(this.site);
+    } catch (error) {
+      this.setError('There was a server error saving your site...');
+    }
   }
 }
 </script>

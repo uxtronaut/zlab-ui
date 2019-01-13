@@ -1,4 +1,5 @@
 import { SitesState } from './sites/types';
+import AlertsState from './alerts/types';
 
 export interface StoreConstants {
   actions: { [key: string]: string },
@@ -8,4 +9,5 @@ export interface StoreConstants {
 
 export interface RootState {
   sites: SitesState,
+  alerts: AlertsState,
 }

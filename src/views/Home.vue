@@ -9,6 +9,7 @@ b-container
 import { Component, Vue } from 'vue-property-decorator';
 import { Action, Mutation } from 'vuex-class';
 
+import AlertsConstants from '@/store/alerts/constants';
 import SitesConstants from '@/store/sites/constants';
 
 import SitesList from '@/components/Sites/List.vue';
@@ -18,10 +19,16 @@ export default class Home extends Vue {
   @Action(SitesConstants.actions.FETCH)
   private fetchSites!: () => void;
 
+  @Mutation(AlertsConstants.mutations.SET_ERROR) setError!: (message: undefined) => void;
+
+  @Mutation(AlertsConstants.mutations.SET_NOTICE) setNotice!: (message: undefined) => void;
+
   @Mutation(SitesConstants.mutations.SET_CURRENT_SLUG)
   private setCurrentSlug!: (siteSlug: undefined) => void;
 
   private created(): void {
+    this.setError(undefined);
+    this.setNotice(undefined);
     this.setCurrentSlug(undefined);
     this.fetchSites();
   }

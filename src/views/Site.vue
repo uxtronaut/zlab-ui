@@ -7,11 +7,13 @@ b-container
           | Sites
         |
         | / {{ site.name }}
+
     b-col(cols="auto")
       b-button(variant="outline-danger" v-b-modal.confirm-delete)
         | Delete Site
       b-modal(
         id="confirm-delete"
+        ref="confirmDelete"
         :title="'Really delete ' + site.name + '?'"
         ok-variant="danger"
         ok-title="Delete"
@@ -60,9 +62,18 @@ export default class Site extends Vue {
     this.fetch(slug).then(() => this.setCurrentSlug(slug));
   }
 
-  private destroyAndRedirect(): void {
-    this.destroy(this.currentSiteSlug)
-      .then(() => { this.$router.push({ name: 'home' }); });
+  private async destroyAndRedirect(event: Event): Promise<void> {
+    event.preventDefault();
+
+    try {
+      await this.destroy(this.currentSiteSlug);
+      // @ts-ignore
+      this.$refs.confirmDelete.close();
+      this.$router.push({ name: 'home' });
+    } catch (error) {
+      // @ts-ignore
+      this.$refs.confirmDelete.hide();
+    }
   }
 
   private get site(): Site {

@@ -18,15 +18,13 @@ export default class TopBar extends Vue {
 <style lang="sass">
 @import '../variables'
 
-$top-bar-height: 3rem
-
 .top-bar
   height: $top-bar-height
   background-color: $primary
 
   h1
     color: white
-    font-size: $top-bar-height / 2
+    font-size: $top-bar-height / 2.5
     line-height: $top-bar-height
     display: inline-block
 </style>
