@@ -66,6 +66,11 @@ export default class EnvironmentsList extends Vue {
 </script>
 
 <style scoped lang="sass">
+@import '../../../variables'
+
 .btn.btn-outline-primary
   margin-bottom: 1rem
+
+.value
+  font-family: $font-family-monospace
 </style>

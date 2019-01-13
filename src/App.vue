@@ -21,6 +21,9 @@ export default class App extends Vue {}
 </script>
 
 <style lang="sass">
+@import url('https://rsms.me/inter/inter-ui.css')
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro')
+
 @import './variables'
 @import '../node_modules/bootstrap/scss/bootstrap'
 @import '../node_modules/bootstrap-vue/dist/bootstrap-vue'
