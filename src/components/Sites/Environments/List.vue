@@ -2,35 +2,54 @@
 .environments
   h3 Environments
 
+  b-list-group(v-if="site")
+    b-list-group-item(
+      v-for="env in site.environments"
+      :key="env.slug"
+    )
+      b-row
+        b-col
+          h4 {{ env.name }}
+        b-col(cols="auto")
+          delete-button(:slug="env.slug" :name="env.name")/
+
+      code {{ env.domain }}
+
+  p.text-muted(v-if="!newEnvironment && site && !site.environments.length")
+    | No configured environments...
+
+  environment-form(:siteSlug="siteSlug")/
+
   b-button(
     @click="setNewEnvironment({ name: '' })"
     variant="outline-primary"
     size="sm"
   )
     | Add Environment
-
-  environment-form(:siteSlug="siteSlug")/
-
-  p(v-for="env in site.environments" :key="env.slug")
-    | {{ env.name }} {{ env.domain }}
-    | delete
-
-  p.text-muted(v-if="!newEnvironment && site && !site.environments.length")
-    | No configured environments...
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { State, Mutation, Getter } from 'vuex-class';
+import {
+  State,
+  Mutation,
+  Getter,
+} from 'vuex-class';
+
+import { RootState } from '@/store/types';
+import { Site, Environment } from '@/store/sites/types';
 
 import SitesConstants from '@/store/sites/constants';
 
-import { Site, Environment } from '@/store/sites/types';
-
 import EnvironmentForm from './Form.vue';
-import { RootState } from '@/store/types';
+import DeleteButton from './DeleteButton.vue';
 
-@Component({ components: { 'environment-form': EnvironmentForm } })
+@Component({
+  components: {
+    'environment-form': EnvironmentForm,
+    'delete-button': DeleteButton,
+  },
+})
 export default class EnvironmentsList extends Vue {
   @Prop(String) private siteSlug!: string;
 
@@ -42,9 +61,7 @@ export default class EnvironmentsList extends Vue {
 
   @Getter(SitesConstants.getters.getSite) private getSite!: (siteSlug: string) => Site;
 
-  private get site(): Site {
-    return this.getSite(this.siteSlug);
-  }
+  private get site(): Site { return this.getSite(this.siteSlug); }
 }
 </script>
 

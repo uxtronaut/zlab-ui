@@ -42,8 +42,6 @@ export default class NewSiteModal extends Vue {
 
   @Mutation(SitesConstants.mutations.SET_NEW) private setNew!: (site: Site) => void;
 
-  @Mutation(AlertsConstants.mutations.SET_ERROR) private setError!: (message: string) => void;
-
   @Watch('site')
   onSiteChanged(value: Site) {
     if (value) {

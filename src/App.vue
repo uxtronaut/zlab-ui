@@ -35,10 +35,22 @@ h2
 h3
   font-size: 1.15rem
 
+h4
+  font-size: 1rem
+  font-weight: bold
+
 .modal-header
   border-bottom: 0
   padding-bottom: 0
 
 .modal-footer
   border-top: 0
+
+.card .list-group-item
+  background-color: lighten($primary, 48%)
+  margin-bottom: 1rem
+
+.card, .list-group-item
+  p:last-child
+    margin-bottom: 0
 </style>

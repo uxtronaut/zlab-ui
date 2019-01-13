@@ -44,16 +44,16 @@ export default class EnvironmentForm extends Vue {
   @State((state: RootState) => state.sites.newEnvironment)
   private environment!: Environment;
 
-  @Mutation(SitesConstants.mutations.SET_NEW_ENVIRONMENT)
-  private setNewEnvironment!: (environment: undefined) => void;
-
   @Action(SitesConstants.actions.CREATE_ENVIRONMENT)
   private create!: (environment: Environment) => Promise<void>;
 
+  @Mutation(SitesConstants.mutations.SET_NEW_ENVIRONMENT)
+  private setNewEnvironment!: (environment: undefined) => void;
+
   @Watch('environment')
-  onEnvironmentChanged(value: Environment) {
+  onEnvironmentChanged(value: Environment, oldValue: Environment) {
     // @ts-ignore
-    if (value) { this.$nextTick(() => { this.$refs.nameField.focus(); }); }
+    if (!oldValue) { this.$nextTick(() => { this.$refs.nameField.focus(); }); }
   }
 
   private save(event: Event): void {

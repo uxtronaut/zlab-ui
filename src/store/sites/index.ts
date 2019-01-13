@@ -86,10 +86,8 @@ const actions: ActionTree<SitesState, RootState> = {
     // Promise because we need to resolve and redirect home after site
     // is deleted, or reject and stay put after server/connection error
     return new Promise(async (resolve, reject) => {
-      let response: AxiosResponse;
-
       try {
-        response = await api.sites.destroy(siteSlug);
+        await api.sites.destroy(siteSlug);
       } catch (error) {
         setError(commit, 'delete site', error.message);
         reject();
@@ -125,6 +123,25 @@ const actions: ActionTree<SitesState, RootState> = {
 
     commit(_consts.mutations.ADD_ENVIRONMENT, response.data.environment);
     commit(_consts.mutations.SET_NEW_ENVIRONMENT, undefined);
+  },
+
+  async [_consts.actions.DESTROY_ENVIRONMENT](
+    { commit, state }: { commit: Commit, state: SitesState },
+    environmentSlug: string,
+  ) {
+    if (!state.currentSiteSlug) {
+      setError(commit, 'create environment', 'undefined currentSiteSlug');
+      return;
+    }
+
+    try {
+      await api.sites.environments.destroy(state.currentSiteSlug, environmentSlug);
+    } catch (error) {
+      setError(commit, 'delete environment', error.message);
+      return;
+    }
+
+    commit(_consts.mutations.REMOVE_ENVIRONMENT, environmentSlug);
   },
 };
 
@@ -168,11 +185,28 @@ const mutations: MutationTree<SitesState> = {
     });
     return state;
   },
+
+  [_consts.mutations.REMOVE_ENVIRONMENT](state: SitesState, environmentSlug: string) {
+    state.list = state.list.map((site: Site) => {
+      if (site.slug === state.currentSiteSlug) {
+        return Object.assign(
+          {},
+          site,
+          {
+            environments: site.environments
+              .filter((environment: Environment) => environment.slug !== environmentSlug),
+          },
+        );
+      }
+      return site;
+    });
+    return state;
+  },
 };
 
 const getters: GetterTree<SitesState, RootState> = {
-  [_consts.getters.getSite]: (state: SitesState) => (siteSlug: string): Site => state
-    .list.filter((site: Site) => site.slug === siteSlug)[0],
+  [_consts.getters.getSite]: (state: SitesState) => (siteSlug: string): Site => state.list
+    .filter((site: Site) => site.slug === siteSlug)[0],
 };
 
 const module: Module<SitesState, RootState> = {

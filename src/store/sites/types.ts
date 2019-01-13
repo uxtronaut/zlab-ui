@@ -9,6 +9,7 @@ export interface Site {
 export interface Environment {
   id: string;
   name: string;
+  slug: string;
   domain: string;
   publishedAt: string;
   savedAt: string;

@@ -39,6 +39,9 @@ export default {
       create(siteSlug: string, environment: Environment) {
         return http.post(`/sites/${siteSlug}/environments`, { environment });
       },
+      destroy(siteSlug: string, environmentSlug: string) {
+        return http.delete(`/sites/${siteSlug}/environments/${environmentSlug}`);
+      },
     },
   },
 };
