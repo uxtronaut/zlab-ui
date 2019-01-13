@@ -26,10 +26,14 @@ const initialState: SitesState = {
   currentSiteSlug: undefined,
 };
 
+const setError = (commit: Commit, message: string): void => {
+  commit(AlertsConstants.mutations.SET_ERROR, message, { root: true });
+};
+
 const actions: ActionTree<SitesState, RootState> = {
   async [_consts.actions.FETCH](
     { commit }: { commit: Commit },
-    siteSlug: string,
+    siteSlug?: string,
   ) {
     let response: AxiosResponse;
     try {
@@ -41,7 +45,7 @@ const actions: ActionTree<SitesState, RootState> = {
         commit(_consts.mutations.SET, response.data.sites);
       }
     } catch (error) {
-      commit(AlertsConstants.mutations.SET_ERROR, 'Failed to fetch sites...', { root: true });
+      setError(commit, 'Failed to fetch site(s)...');
     }
   },
 
@@ -55,9 +59,11 @@ const actions: ActionTree<SitesState, RootState> = {
       commit(_consts.mutations.SET_NEW, undefined);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.site) {
+        // Validation error
         commit(_consts.mutations.SET_NEW, error.response.data.site);
       } else {
-        commit(AlertsConstants.mutations.SET_ERROR, 'Failed to save site...', { root: true });
+        // Server/Connection error
+        setError(commit, 'Failed to save site...');
       }
     }
   },
@@ -66,13 +72,15 @@ const actions: ActionTree<SitesState, RootState> = {
     { commit }: { commit: Commit },
     siteSlug: string,
   ) {
+    // Promise because we need to resolve and redirect home after site
+    // is deleted, or reject and stay put on server/connection error
     return new Promise(async (resolve, reject) => {
       try {
         const response: AxiosResponse = await api.sites.destroy(siteSlug);
         commit(_consts.mutations.REMOVE, siteSlug);
         resolve();
       } catch (error) {
-        commit(AlertsConstants.mutations.SET_ERROR, 'Failed to delete site...', { root: true });
+        setError(commit, 'Failed to delete site...');
         reject();
       }
     });
