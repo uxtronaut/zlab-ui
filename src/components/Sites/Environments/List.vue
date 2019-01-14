@@ -10,6 +10,7 @@
       b-row
         b-col
           h4.value {{ env.name }}
+
         b-col(cols="auto")
           delete-button(
             :name="env.name"
