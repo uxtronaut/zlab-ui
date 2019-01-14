@@ -1,10 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator';
-import { State } from 'vuex-class';
 import { get } from 'lodash';
-
-import { Site } from '@/store/sites/types';
-
-import { RootState } from '@/store/types';
 
 @Component
 class HasValidations extends Vue {
