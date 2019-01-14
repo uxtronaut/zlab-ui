@@ -25,3 +25,14 @@ export default class Alerts extends Vue {
   @State((state: RootState) => state.alerts.notice) notice!: string | undefined;
 }
 </script>
+
+<style scoped lang="sass">
+.alerts
+  position: absolute
+  width: 100%
+  bottom: 0
+  z-index: 2
+
+  .alert
+    margin-bottom: 0
+</style>

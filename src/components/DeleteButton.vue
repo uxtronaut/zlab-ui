@@ -1,18 +1,18 @@
 <template lang="pug">
 div
   b-button(
-    @click="confirmDelete"
+    @click="confirm"
     variant="outline-danger"
     size="sm"
   )
-    | Delete Environment
+    | Delete {{ resourceName }}
 
   b-modal(
-    ref="confirmDelete"
+    ref="confirmation"
     :title="name && 'Really delete ' + name + '?'"
     ok-variant="danger"
     ok-title="Delete"
-    @ok="() => { destroy(slug) }"
+    @ok="confirmed"
   )
     | This action cannot be undone...
 </template>
@@ -24,19 +24,21 @@ import { Action } from 'vuex-class';
 import SitesConstants from '@/store/sites/constants';
 
 @Component
-export default class DeleteSiteButton extends Vue {
-  @Prop(String) private slug!: string;
-
+export default class DeleteButton extends Vue {
   @Prop(String) private name!: string;
 
-  @Action(SitesConstants.actions.DESTROY_ENVIRONMENT)
-  private destroy!: (environmentSlug: string) => void;
+  @Prop(String) private resourceName!: string;
 
-  private confirmDelete(event: Event) {
-    event.preventDefault();
-
+  private confirm() {
     // @ts-ignore
-    this.$refs.confirmDelete.show();
+    this.$refs.confirmation.show();
+  }
+
+  private confirmed(event: Event) {
+    event.preventDefault();
+    // @ts-ignore
+    this.$refs.confirmation.hide();
+    setTimeout(() => this.$emit('ok'), 333);
   }
 }
 </script>

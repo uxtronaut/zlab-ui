@@ -1,11 +1,11 @@
 <template lang="pug">
 div
   b-modal(
-    @shown="() => { $refs.siteNameField.focus(); }"
-    @hidden="() => { if (site) { setNew(undefined) } }"
-    :hide-footer="true"
     title="New Site"
     ref="modal"
+    @shown="() => $refs.siteNameField.focus()"
+    @hidden="() => { if (site) { setNew(undefined) } }"
+    :hide-footer="true"
   )
     b-form(v-if="site" @submit="saveAndKeepOpen")
       b-form-group(

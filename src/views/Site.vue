@@ -9,17 +9,13 @@ b-container
         | / {{ site && site.name }}
 
     b-col(cols="auto")
-      b-button(variant="outline-danger" v-b-modal.confirm-delete)
-        | Delete Site
-      b-modal(
-        id="confirm-delete"
-        ref="confirmDelete"
-        :title="site && 'Really delete ' + site.name + '?'"
-        ok-variant="danger"
-        ok-title="Delete"
-        @ok="destroyAndRedirect"
-      )
-        | This action cannot be undone...
+      delete-button(
+        v-if="site"
+        :name="site.name"
+        resourceName="Site"
+        variant="md"
+        @ok="destroyAndRedirect($event)"
+      )/
 
   b-row
     b-col
@@ -40,8 +36,14 @@ import SitesConstants from '@/store/sites/constants';
 import { RootState } from '@/store/types';
 
 import EnvironmentsList from '@/components/Sites/Environments/List.vue';
+import DeleteButton from '@/components/DeleteButton.vue';
 
-@Component({ components: { 'environments-list': EnvironmentsList } })
+@Component({
+  components: {
+    'environments-list': EnvironmentsList,
+    'delete-button': DeleteButton,
+  },
+})
 export default class Site extends Vue {
   @State((state: RootState) => state.sites.currentSiteSlug)
   private currentSiteSlug!: string;
@@ -63,18 +65,13 @@ export default class Site extends Vue {
     this.fetch(slug).then(() => this.setCurrentSlug(slug));
   }
 
-  private async destroyAndRedirect(event: Event): Promise<void> {
-    event.preventDefault();
-
+  private async destroyAndRedirect(): Promise<void> {
     try {
       await this.destroy(this.currentSiteSlug);
-      // @ts-ignore
-      this.$refs.confirmDelete.hide();
-      this.$router.push({ name: 'home' });
     } catch (error) {
-      // @ts-ignore
-      this.$refs.confirmDelete.hide();
+      return;
     }
+    this.$router.push({ name: 'home' });
   }
 
   private get site(): Site {

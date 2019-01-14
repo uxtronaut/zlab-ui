@@ -27,8 +27,6 @@ export default class Home extends Vue {
   private setCurrentSlug!: (siteSlug: undefined) => void;
 
   private created(): void {
-    this.setError(undefined);
-    this.setNotice(undefined);
     this.setCurrentSlug(undefined);
     this.listSites();
   }

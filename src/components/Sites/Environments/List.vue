@@ -11,7 +11,12 @@
         b-col
           h4.value {{ env.name }}
         b-col(cols="auto")
-          delete-button(:slug="env.slug" :name="env.name")/
+          delete-button(
+            :name="env.name"
+            resourceName="Environment"
+            variant="sm"
+            @ok="destroy(env.slug)"
+          )/
 
       div.value {{ env.domain }}
 
@@ -32,6 +37,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import {
   State,
+  Action,
   Mutation,
   Getter,
 } from 'vuex-class';
@@ -42,7 +48,7 @@ import { Site, Environment } from '@/store/sites/types';
 import SitesConstants from '@/store/sites/constants';
 
 import EnvironmentForm from './Form.vue';
-import DeleteButton from './DeleteButton.vue';
+import DeleteButton from '../../DeleteButton.vue';
 
 @Component({
   components: {
@@ -55,6 +61,9 @@ export default class EnvironmentsList extends Vue {
 
   @State((state: RootState) => state.sites.newEnvironment)
   private newEnvironment!: Environment;
+
+  @Action(SitesConstants.actions.DESTROY_ENVIRONMENT)
+  private destroy!: (environmentSlug: string) => Promise<void>;
 
   @Mutation(SitesConstants.mutations.SET_NEW_ENVIRONMENT)
   private setNewEnvironment!: (environment: Environment) => void;
