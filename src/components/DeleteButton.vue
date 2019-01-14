@@ -12,6 +12,7 @@ div
     :title="name && 'Really delete ' + name + '?'"
     ok-variant="danger"
     ok-title="Delete"
+    cancel-variant="light"
     @ok="confirmed"
   )
     | This action cannot be undone...

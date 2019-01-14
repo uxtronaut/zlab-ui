@@ -21,6 +21,7 @@ export default class TopBar extends Vue {
 .top-bar
   height: $top-bar-height
   background-color: $primary
+  margin-bottom: 1rem
 
   h1
     color: white

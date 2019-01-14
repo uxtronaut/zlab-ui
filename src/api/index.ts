@@ -1,7 +1,10 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
+import flynn from './flynn';
+
 import { Site, Environment } from '@/store/sites/types';
+import { Cluster } from '@/store/clusters/types';
 
 const http: AxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_ROOT,
@@ -22,6 +25,7 @@ const http: AxiosInstance = axios.create({
 });
 
 export default {
+  flynn,
   sites: {
     list(): Promise<AxiosResponse> {
       return http.get('/sites');
@@ -36,12 +40,29 @@ export default {
       return http.delete(`/sites/${siteSlug}`);
     },
     environments: {
-      create(siteSlug: string, environment: Environment) {
+      create(siteSlug: string, environment: Environment): Promise<AxiosResponse> {
         return http.post(`/sites/${siteSlug}/environments`, { environment });
       },
-      destroy(siteSlug: string, environmentSlug: string) {
+      destroy(siteSlug: string, environmentSlug: string): Promise<AxiosResponse> {
         return http.delete(`/sites/${siteSlug}/environments/${environmentSlug}`);
       },
+    },
+  },
+  clusters: {
+    list(): Promise<AxiosResponse> {
+      return http.get('/clusters');
+    },
+    fetch(clusterSlug: string): Promise<AxiosResponse> {
+      return http.get(`/clusters/${clusterSlug}`);
+    },
+    create(cluster: Cluster): Promise<AxiosResponse> {
+      return http.post('/clusters', { cluster });
+    },
+    update(cluster: Cluster): Promise<AxiosResponse> {
+      return http.put(`/clusters/${cluster.slug}`, { cluster });
+    },
+    destroy(clusterSlug: string): Promise<AxiosResponse> {
+      return http.delete(`/clusters/${clusterSlug}`);
     },
   },
 };

@@ -14,7 +14,7 @@
     b-list-group-item(
       v-for="site in sites"
       :key="site._id"
-      :to="{ name: 'sites', params: { siteSlug: site.slug } }"
+      :to="{ name: 'site', params: { siteSlug: site.slug } }"
     )
       | {{ site.name }}
 
