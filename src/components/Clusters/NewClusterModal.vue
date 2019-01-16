@@ -1,6 +1,7 @@
 <template lang="pug">
 b-modal(
   @shown="onShown"
+  @hidden="() => { if (cluster) { setNewCluster(undefined); } }"
   ref="modal"
   title="Deploy Cluster"
   cancel-variant="light"
@@ -150,7 +151,7 @@ b-modal(
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import { State, Action } from 'vuex-class';
+import { State, Action, Mutation } from 'vuex-class';
 
 import { RootState } from '@/store/types';
 import { Cluster } from '@/store/clusters/types';
@@ -166,6 +167,9 @@ export default class NewClusterModal extends Vue {
 
   @Action(ClustersConstants.actions.LIST_FLYNN_RELEASES)
   private listFlynnReleases!: () => void;
+
+  @Mutation(ClustersConstants.mutations.SET_NEW)
+  private setNewCluster!: (cluster: undefined) => void;
 
   @Watch('cluster')
   onClusterChanged(value: Cluster | undefined) {
