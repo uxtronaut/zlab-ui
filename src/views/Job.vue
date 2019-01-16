@@ -6,7 +6,7 @@ b-container
   b-row
     b-col
       b-card
-        code {{ job.log }}
+        pre {{ job.log }}
 </template>
 
 <script lang="ts">
@@ -40,4 +40,7 @@ export default class JobPage extends Vue {
 </script>
 
 <style scoped lang="sass">
+.card, pre
+  background-color: black
+  color: white
 </style>

@@ -5,7 +5,7 @@ b-list-group
     :key="job.id"
     :to="{ name: 'job', params: { jobId: job.id } }"
   )
-    | {{ job.name }}
+    | {{ job.name }} {{ job.erroredAt }} {{ job.finishedAt }}
 </template>
 
 <script lang="ts">
@@ -19,7 +19,7 @@ import { Job } from '@/store/jobs/types';
 @Component
 export default class JobsList extends Vue {
   @State((state: RootState) => state.jobs.list)
-  private jobs!: Job[]
+  private jobs!: Job[];
 }
 </script>
 
