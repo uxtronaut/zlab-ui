@@ -1,5 +1,5 @@
 export interface Site {
-  id: TemplateStringsArray;
+  id: string;
   name: string;
   slug: string;
   environments: Environment[];

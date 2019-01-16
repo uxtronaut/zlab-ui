@@ -5,6 +5,8 @@ import Home from './views/Home.vue';
 import Sites from './views/Sites.vue';
 import Site from './views/Site.vue';
 import Clusters from './views/Clusters.vue';
+import Jobs from './views/Jobs.vue';
+import Job from './views/Job.vue';
 
 Vue.use(Router);
 
@@ -30,6 +32,16 @@ export default new Router({
       path: '/clusters',
       name: 'clusters',
       component: Clusters,
+    },
+    {
+      path: '/jobs',
+      name: 'jobs',
+      component: Jobs,
+    },
+    {
+      path: '/jobs/:jobId',
+      name: 'job',
+      component: Job,
     },
   ],
 });

@@ -10,6 +10,7 @@
             b-nav-item(:to="{ name: 'home' }" exact) Home
             b-nav-item(:to="{ name: 'sites' }") Sites
             b-nav-item(:to="{ name: 'clusters' }") Clusters
+            b-nav-item(:to="{ name: 'jobs' }") Jobs
   router-view/
 </template>
 

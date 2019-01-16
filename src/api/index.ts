@@ -67,4 +67,9 @@ export default {
       return http.delete(`/clusters/${clusterSlug}`);
     },
   },
+  jobs: {
+    list(): Promise<AxiosResponse> {
+      return http.get('/jobs');
+    },
+  },
 };
