@@ -14,6 +14,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/actioncable": "^5.2.0",
     "@types/humps": "^1.1.2",
     "@types/lodash": "^4.14.119",
     "@vue/cli-plugin-babel": "^3.3.0",
@@ -23,6 +24,7 @@
     "@vue/cli-service": "^3.3.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-typescript": "^3.2.0",
+    "actioncable": "^5.2.2",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "bootstrap-vue": "^2.0.0-rc.11",
@@ -35,9 +37,9 @@
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^7.0.1",
     "typescript": "~3.1.1",
-    "vue-template-compiler": "^2.5.21",
-    "vuex-class": "^0.3.1",
     "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^7.3.0"
+    "vue-property-decorator": "^7.3.0",
+    "vue-template-compiler": "^2.5.21",
+    "vuex-class": "^0.3.1"
   }
 }

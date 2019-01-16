@@ -14,6 +14,7 @@
       v-for="cluster in clusters"
       :key="cluster.id"
     )
+      | {{ cluster.name }}
   new-cluster-modal/
 </template>
 

@@ -1,12 +1,13 @@
 <template lang="pug">
 b-modal(
   @shown="onShown"
-  @hidden="() => { if (cluster) { setNewCluster(undefined); } }"
+  @hidden="() => { if (cluster) { setNew(undefined); } }"
   ref="modal"
   title="Deploy Cluster"
   cancel-variant="light"
   ok-title="Deploy"
   size="lg"
+  :hide-footer="true"
 )
   b-form(v-if="cluster")
     section
@@ -147,6 +148,10 @@ b-modal(
           type="text"
           v-model="cluster.blobStoreAwsBucket"
         )
+
+    .modal-footer(slot="modal-footer")
+      b-button(variant="light" @click="() => setNew(undefined)") Cancel
+      b-button(variant="primary" type="submit" @click="saveAndKeepOpen") Deploy
 </template>
 
 <script lang="ts">
@@ -168,8 +173,11 @@ export default class NewClusterModal extends Vue {
   @Action(ClustersConstants.actions.LIST_FLYNN_RELEASES)
   private listFlynnReleases!: () => void;
 
+  @Action(ClustersConstants.actions.CREATE)
+  private save!: (cluster: Cluster) => Promise<void>;
+
   @Mutation(ClustersConstants.mutations.SET_NEW)
-  private setNewCluster!: (cluster: undefined) => void;
+  private setNew!: (cluster: undefined) => void;
 
   @Watch('cluster')
   onClusterChanged(value: Cluster | undefined) {
@@ -192,6 +200,17 @@ export default class NewClusterModal extends Vue {
 
     [this.cluster.nodeFlynnVersion] = this.flynnReleases;
   }
+
+  private async saveAndKeepOpen(event: Event) {
+    event.preventDefault(); // Prevent modal from closing on OK
+
+    if (!this.cluster) { return; }
+    try {
+      await this.save(this.cluster);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 </script>
 
@@ -204,4 +223,7 @@ section
 
   fieldset:last-child
     margin-bottom: 0
+
+.modal-footer
+  padding: 0
 </style>

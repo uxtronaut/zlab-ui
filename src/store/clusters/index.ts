@@ -43,15 +43,18 @@ const actions: ActionTree<ClustersState, RootState> = {
   async [_consts.actions.CREATE]({ commit, dispatch }, cluster: Cluster) {
     let response: AxiosResponse;
 
-    try {
-      response = await api.clusters.create(cluster);
-    } catch (error) {
-      setError(dispatch, 'create cluster', error.message);
-      return;
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        response = await api.clusters.create(cluster);
+      } catch (error) {
+        setError(dispatch, 'create cluster', error.message);
+        return reject();
+      }
 
-    commit(_consts.mutations.ADD, response.data.cluster);
-    setNotice(dispatch, 'Cluster created');
+      commit(_consts.mutations.ADD, response.data.cluster);
+      setNotice(dispatch, 'Cluster deployment queued');
+      return resolve();
+    });
   },
 
   async [_consts.actions.LIST_FLYNN_RELEASES]({ commit, dispatch }) {

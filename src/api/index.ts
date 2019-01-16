@@ -2,12 +2,13 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
 import flynn from './flynn';
+import cable from './cable';
 
 import { Site, Environment } from '@/store/sites/types';
 import { Cluster } from '@/store/clusters/types';
 
 const http: AxiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_ROOT,
+  baseURL: `${process.env.VUE_APP_API_PROTOCOL}://${process.env.VUE_APP_API_ROOT}/api`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -26,6 +27,7 @@ const http: AxiosInstance = axios.create({
 
 export default {
   flynn,
+  cable,
   sites: {
     list(): Promise<AxiosResponse> {
       return http.get('/sites');
