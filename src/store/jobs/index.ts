@@ -51,11 +51,17 @@ const mutations: MutationTree<JobsState> = {
   },
 };
 
+const getters: GetterTree<JobsState, RootState> = {
+  [_consts.getters.getJob]: (state: JobsState) => (jobId: string) => state.list
+    .filter((job: Job) => job.id === jobId)[0],
+};
+
 const module: Module<JobsState, RootState> = {
   namespaced: true,
   state: initialState,
   actions,
   mutations,
+  getters,
 };
 
 export default module;

@@ -1,4 +1,12 @@
 <template lang="pug">
+b-container
+  b-row(align-v="center")
+    b-col
+      h2 {{ job.name }}
+  b-row
+    b-col
+      b-card
+        code {{ job.log }}
 </template>
 
 <script lang="ts">

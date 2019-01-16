@@ -1,7 +1,8 @@
 <template lang="pug">
 b-container
-  b-row
+  b-row(align-v="center")
     b-col
+      h2 Jobs
       jobs-list/
 </template>
 
