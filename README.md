@@ -1,34 +1,49 @@
-# zpub-ui
+# ZPub UI
 
-## Project setup
+Frontend for homelab/network administration tooling.
+
+Simple Vue/TypeScript/Bootstrap static app for managing homelab resources
+
+* Hosts (ESXi and Digital Ocean)
+* Storage (S3 and Digital Ocean)
+* Flynn Clusters
+* Apps (static and dynamic, served via Flynn)
+* DNS (Route53)
+
+## Environment
+
+```
+VUE_APP_OAUTH_ROOT=http://localhost:3001
+VUE_APP_API_ROOT=http://localhost:3000/api
+```
+
+## Scripts
+Project setup
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+Compiles and hot-reloads for development
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+Compiles and minifies for production
 ```
 yarn run build
 ```
 
-### Run your tests
+Run tests
 ```
 yarn run test
 ```
 
-### Lints and fixes files
+Lint
 ```
 yarn run lint
 ```
 
-### Run your end-to-end tests
+End-to-end tests
 ```
 yarn run test:e2e
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
