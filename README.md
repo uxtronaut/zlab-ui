@@ -1,19 +1,18 @@
-# ZPub UI
+# zlab-ui
 
 Frontend for homelab/network administration tooling.
 
 Simple Vue/TypeScript/Bootstrap static app for managing homelab resources
 
 * Hosts (ESXi and Digital Ocean)
-* Storage (S3 and Digital Ocean)
 * Flynn Clusters
-* Apps (static and dynamic, served via Flynn)
-* DNS (Route53)
+* Sites (static and dynamic, served via Flynn)
+* Backups
+* Deployments
 
 ## Environment
 
 ```
-VUE_APP_OAUTH_ROOT=http://localhost:3001
 VUE_APP_API_ROOT=http://localhost:3000/api
 ```
 
