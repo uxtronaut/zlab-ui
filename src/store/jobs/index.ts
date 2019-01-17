@@ -12,7 +12,7 @@ import api from '@/api/index';
 import { removeNamespace } from '@/util';
 
 import { RootState } from '../types';
-import { JobsState, Job } from './types';
+import { JobsState, Job, JobOutputMessage } from './types';
 
 import { setError, setNotice } from '../alerts';
 import JobsConstants from './constants';
@@ -22,6 +22,7 @@ const _consts = removeNamespace('jobs/', JobsConstants);
 const initialState: JobsState = {
   list: [],
   currentJobId: undefined,
+  newJobId: undefined,
 };
 
 const actions: ActionTree<JobsState, RootState> = {
@@ -37,6 +38,23 @@ const actions: ActionTree<JobsState, RootState> = {
 
     commit(_consts.mutations.SET, response.data.jobs);
   },
+
+  async [_consts.actions.FETCH]({ commit, dispatch }, jobId: string) {
+    let response: AxiosResponse;
+
+    try {
+      response = await api.jobs.fetch(jobId);
+    } catch (error) {
+      setError(dispatch, 'fetch job', error.message);
+      return;
+    }
+
+    commit(_consts.mutations.SET, [response.data.job]);
+  },
+
+  [_consts.actions.UPDATE_LOG]({ commit, dispatch, getters }, message: JobOutputMessage) {
+    commit(_consts.mutations.APPEND_LOG, message);
+  },
 };
 
 const mutations: MutationTree<JobsState> = {
@@ -49,11 +67,27 @@ const mutations: MutationTree<JobsState> = {
     state.currentJobId = jobId;
     return state;
   },
+
+  [_consts.mutations.APPEND_LOG](state: JobsState, message: JobOutputMessage) {
+    state.newJobId = message.jobId;
+
+    state.list = state.list.map((job: Job) => {
+      if (job.id === message.jobId) {
+        return Object.assign({}, job, { log: [message.content, ...job.log] });
+      }
+      return job;
+    });
+
+    return state;
+  },
 };
 
 const getters: GetterTree<JobsState, RootState> = {
-  [_consts.getters.getJob]: (state: JobsState) => (jobId: string) => state.list
-    .filter((job: Job) => job.id === jobId)[0],
+  [_consts.getters.getJob]: (state: JobsState) => (jobId: string) => {
+    if (!state.list) { return undefined; }
+
+    return state.list.filter((job: Job) => job.id === jobId)[0];
+  },
 };
 
 const module: Module<JobsState, RootState> = {

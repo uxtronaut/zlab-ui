@@ -2,9 +2,9 @@
 #app
   top-bar/
   alerts/
-  .container
-    .row
-      .col
+  b-container
+    b-row
+      b-col
         b-tabs
           template(slot="tabs")
             b-nav-item(:to="{ name: 'home' }" exact) Home
@@ -12,6 +12,9 @@
             b-nav-item(:to="{ name: 'clusters' }") Clusters
             b-nav-item(:to="{ name: 'jobs' }") Jobs
   router-view/
+  footer
+    .container
+      p &copy; Copyright 2019 Zach Payne
 </template>
 
 <script lang="ts">
@@ -65,4 +68,8 @@ h4
 .card, .list-group-item
   p:last-child
     margin-bottom: 0
+
+footer
+  margin: 2rem 0
+  text-align: center
 </style>

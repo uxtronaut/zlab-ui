@@ -17,7 +17,7 @@ b-modal(
         horizontal
       )
         b-form-input(
-          ref="clusterNameField"
+          ref="nameField"
           type="text"
           v-model="cluster.name"
         )
@@ -170,11 +170,14 @@ export default class NewClusterModal extends Vue {
   @State((state: RootState) => state.clusters.flynnReleases)
   private flynnReleases!: string[];
 
+  @State((state: RootState) => state.jobs.newJobId)
+  private newJobId!: string;
+
   @Action(ClustersConstants.actions.LIST_FLYNN_RELEASES)
   private listFlynnReleases!: () => void;
 
   @Action(ClustersConstants.actions.CREATE)
-  private save!: (cluster: Cluster) => Promise<void>;
+  private save!: (cluster: Cluster) => Promise<string>;
 
   @Mutation(ClustersConstants.mutations.SET_NEW)
   private setNew!: (cluster: undefined) => void;
@@ -196,7 +199,7 @@ export default class NewClusterModal extends Vue {
 
   private onShown() {
     // @ts-ignore
-    this.$refs.clusterNameField.focus();
+    this.$refs.nameField.focus();
 
     [this.cluster.nodeFlynnVersion] = this.flynnReleases;
   }
@@ -206,7 +209,8 @@ export default class NewClusterModal extends Vue {
 
     if (!this.cluster) { return; }
     try {
-      await this.save(this.cluster);
+      const jobId: string = await this.save(this.cluster);
+      this.$router.push({ name: 'job', params: { jobId: jobId } });
     } catch (error) {
       console.log(error);
     }

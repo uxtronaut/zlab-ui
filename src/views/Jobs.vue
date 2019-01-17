@@ -19,7 +19,6 @@ export default class Jobs extends Vue {
   private listJobs!: () => Promise<void>;
 
   private created(): void {
-    console.log('arrr');
     this.listJobs();
   }
 }

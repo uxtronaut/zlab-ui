@@ -2,25 +2,28 @@
 b-container
   b-row(align-v="center")
     b-col
-      h2 {{ job.name }}
+      h2 {{ job && job.name }}
   b-row
     b-col
       b-card
-        pre {{ job.log }}
+        pre {{ job && job.log }}
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import { Action, Getter } from 'vuex-class';
 
-import{ RootState } from '@/store/types';
+import { RootState } from '@/store/types';
 import JobsConstants from '@/store/jobs/constants';
 import { Job } from '@/store/jobs/types';
 
 @Component
 export default class JobPage extends Vue {
+  @Action(JobsConstants.actions.FETCH)
+  private fetchJob!: (jobId: string) => Promise<Job>;
+
   @Getter(JobsConstants.getters.getJob)
-  private getJob!: (jobId: string) => Promise<Job>
+  private getJob!: (jobId: string) => Promise<Job>;
 
   private get currentJobId() {
     return this.$router.currentRoute.params.jobId;
@@ -30,7 +33,8 @@ export default class JobPage extends Vue {
     return this.getJob(this.currentJobId);
   }
 
-  created() {
+  async created() {
+    await this.fetchJob(this.currentJobId);
     this.$store.commit(
       JobsConstants.mutations.SET_CURRENT_ID,
       this.currentJobId,

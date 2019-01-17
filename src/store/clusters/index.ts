@@ -53,7 +53,7 @@ const actions: ActionTree<ClustersState, RootState> = {
 
       commit(_consts.mutations.ADD, response.data.cluster);
       setNotice(dispatch, 'Cluster deployment queued');
-      return resolve();
+      return resolve(response.data.job_id);
     });
   },
 

@@ -71,5 +71,8 @@ export default {
     list(): Promise<AxiosResponse> {
       return http.get('/jobs');
     },
+    fetch(jobId: string): Promise<AxiosResponse> {
+      return http.get(`/jobs/${jobId}`);
+    },
   },
 };

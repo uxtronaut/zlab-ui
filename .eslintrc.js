@@ -14,6 +14,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'no-param-reassign': 'off',
     'no-underscore-dangle': [2, { 'allow': ['_consts'] }],
+    'import/no-cycle': 'off',
   },
   parserOptions: {
     parser: 'typescript-eslint-parser',

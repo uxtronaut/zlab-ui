@@ -6,7 +6,13 @@ export interface Job {
   log: string;
 }
 
+export interface JobOutputMessage {
+  jobId: string;
+  content: string;
+}
+
 export interface JobsState {
   list: Job[];
   currentJobId: string | undefined;
+  newJobId: string | undefined;
 }

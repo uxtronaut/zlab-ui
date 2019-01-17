@@ -5,7 +5,13 @@ b-list-group
     :key="job.id"
     :to="{ name: 'job', params: { jobId: job.id } }"
   )
-    | {{ job.name }} {{ job.erroredAt }} {{ job.finishedAt }}
+    b-row
+      b-col(cols="auto")
+        Icon(v-if="job.erroredAt" icon="times" class="text-danger")
+        Icon(v-if="job.finishedAt" icon="check" class="text-success")
+        Icon(v-if="!job.erroredAt && !job.finishedAt" icon="spinner" spin)
+      b-col
+        | {{ job.name }}
 </template>
 
 <script lang="ts">
