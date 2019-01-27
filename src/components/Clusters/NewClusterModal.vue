@@ -210,7 +210,7 @@ export default class NewClusterModal extends Vue {
     if (!this.cluster) { return; }
     try {
       const jobId: string = await this.save(this.cluster);
-      this.$router.push({ name: 'job', params: { jobId: jobId } });
+      this.$router.push({ name: 'job', params: { jobId } });
     } catch (error) {
       console.log(error);
     }

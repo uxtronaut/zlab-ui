@@ -1,4 +1,8 @@
 <template lang="pug">
+b-container
+  b-row
+    b-col
+      h2 Home
 </template>
 
 <script lang="ts">
